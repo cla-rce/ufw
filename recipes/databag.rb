@@ -44,7 +44,7 @@ Chef::Log.debug "ufw::databag:rlist: #{rlist}"
 fw_db = data_bag('firewall')
 Chef::Log.debug "ufw::databag:firewall:#{fw_db}"
 
-node.set['firewall']['rules'] = [] unless node.set['firewall']['rules'].respond_to? :concat
+new_rules = []
 
 rlist.each do |entry|
   Chef::Log.debug "ufw::databag: \"#{entry}\""
@@ -53,7 +53,7 @@ rlist.each do |entry|
     item = data_bag_item('firewall', entry)
     rules = item['rules']
     unless rules.nil?
-      new_rules = node['firewall']['rules'].concat(rules).uniq
+      new_rules = new_rules.concat(rules).uniq
       node.set['firewall']['rules'] = new_rules
     end
   end
